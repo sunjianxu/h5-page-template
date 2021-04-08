@@ -11,7 +11,7 @@
         <video
           ref="videoRef"
           poster="./assets/lib/images/poster.gif"
-          src="//app.maohong123.com/wap/img/fkos/16s.mp4"
+          src="https://app.maohong123.com/wap/img/fkos/16s.mp4"
           x-webkit-airplay="true"
           webkit-playsinline="true"
           playsinline="true"
