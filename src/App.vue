@@ -11,7 +11,7 @@
         <video
           ref="videoRef"
           poster="./assets/lib/images/poster.gif"
-          src="./assets/lib/video/16s.mp4"
+          src="./assets/lib/media/video/16s.mp4"
           x-webkit-airplay="true"
           webkit-playsinline="true"
           playsinline="true"
