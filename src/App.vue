@@ -11,7 +11,7 @@
         <video
           ref="videoRef"
           poster="./assets/lib/images/poster.gif"
-          src="./assets/lib/media/video/16s.mp4"
+          src="./assets/lib/media/video/mxw.mp4"
           x-webkit-airplay="true"
           webkit-playsinline="true"
           playsinline="true"
@@ -38,8 +38,8 @@
       <div class="game-info-wrapper">
         <div class="wrapper">
           <div class="game-info">
-            <img class="icon" src="./assets/lib/images/icon.png">
-            <span class="game-name">九州神域</span>
+            <img class="icon" :src="VUE_APP_GAME_ICON">
+            <span class="game-name">{{ VUE_APP_GAME_NAME }}</span>
           </div>
           <div class="action-btn-wrapper">
             <div class="btn replay" @click="handleReplayVideo">重播</div>
@@ -48,17 +48,17 @@
         </div>
       </div>
     </div>
-    <div class="gift-wrapper">
+    <div class="gift-wrapper" @click="handleNowDownload">
       <div class="info-wrapper">
         <div class="content-wrapper">
           <div class="game-info">
-            <img src="./assets/lib/images/icon.png" class="icon" alt="">
+            <img :src="VUE_APP_GAME_ICON" class="icon" alt="">
             <div class="abstract-wrapper">
-              <span class="game-name">九州神域</span>
-              <span class="slogan">无限爆装送顶赞，装备秒回收</span>
+              <span class="game-name">{{ VUE_APP_GAME_NAME }}</span>
+              <span class="slogan">{{ VUE_APP_GAME_SLOGAN }}</span>
             </div>
           </div>
-          <div class="download-btn" @click="handleNowDownload">
+          <div class="download-btn">
             点我玩玩
           </div>
         </div>
@@ -82,10 +82,11 @@ export default {
     return {
       showPlayBtnWrapper: true,
       showReplayWrapper: false,
-      config: {
-        apkURL: 'https://usercenter.cmaom.com/apk/ad/a5689d04bfd2b76f5ad064bd6a34bfd8.apk',
-        ipaURL: `http://192.168.10.82:8080/?game_version=1.0.0&game_name=test&device_id=06CE8AFB-6330-4849-B377-BDB57397A034&ad=08acc0ace636aff78f1bbc36d5cb1a2a&game_id=129&partner_id=2&os_type=ios&game_url=https://srvapi.baizegame.com/h5/idx/sid/10197?opr_cid=10039&page_title=${window.btoa(window.encodeURIComponent('冒险王'))}&game_icon=${window.btoa(window.encodeURIComponent('https://app.maohong123.com/wap/img/fkos/icon.png'))}`
-      }
+      VUE_APP_GAME_ICON: process.env.VUE_APP_GAME_ICON,
+      VUE_APP_GAME_SLOGAN: process.env.VUE_APP_GAME_SLOGAN,
+      VUE_APP_GAME_NAME: process.env.VUE_APP_GAME_NAME,
+      VUE_APP_APK_URL: process.env.VUE_APP_APK_URL,
+      VUE_APP_IPA_URL: `${process.env.VUE_APP_IPA_URL}&page_title=${window.btoa(window.encodeURIComponent(process.env.VUE_APP_GAME_NAME))}&game_icon=${window.btoa(window.encodeURIComponent(process.env.VUE_APP_GAME_ICON))}`
     }
   },
   computed: {
@@ -100,12 +101,16 @@ export default {
     }
   },
   mounted() {
-    const { pageWidth, pageHeight } = getViewPortSize();
+    const { pageHeight } = getViewPortSize();
     const elementById = this.videoDOM;
-    elementById.style.width = pageWidth + 'px';
+    elementById.style.width = '100%';
     elementById.style.height = pageHeight + 'px';
     elementById.style.objectFit = 'fill';
     elementById.addEventListener('ended', this.onVideoEnded, false);
+  },
+  beforeDestroy() {
+    const videoDOM = this.videoDOM;
+    videoDOM.removeEventListener('ended', this.onVideoEnded, false)
   },
   methods: {
     handleReplayVideo() {
@@ -121,7 +126,7 @@ export default {
       this.showPlayBtnWrapper = this.showReplayWrapper = true;
     },
     handleNowDownload() {
-      this.isAndroid ? downloadSource(this.config.apkURL) : downloadSource(this.config.ipaURL);
+      this.isAndroid ? downloadSource(this.VUE_APP_APK_URL) : downloadSource(this.VUE_APP_IPA_URL);
     }
   }
 }
@@ -141,32 +146,27 @@ html, body, #app {
     right: 0;
     z-index: 5;
     overflow: hidden;
-
     .video_cover {
       position: absolute;
       z-index: 1;
-
       &.video_cover1 {
         top: 0;
         left: 0;
         right: 0;
         height: 35%;
       }
-
       &.video_cover2 {
         top: 0;
         right: 0;
         bottom: 0;
         width: 35%;
       }
-
       &.video_cover3 {
         bottom: 0;
         left: 0;
         right: 0;
         height: 35%;
       }
-
       &.video_cover4 {
         bottom: 0;
         left: 0;
@@ -229,14 +229,12 @@ html, body, #app {
       display: flex;
       justify-content: center;
       align-items: center;
-
       .wrapper {
         width: 60%;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
-
         .game-info {
           display: flex;
           flex-direction: column;
@@ -281,7 +279,7 @@ html, body, #app {
 
   .gift-wrapper {
     position: absolute;
-    bottom: 8%;
+    bottom: 2%;
     left: 5%;
      width: 100%;
 
@@ -346,7 +344,7 @@ html, body, #app {
         position: absolute;
         bottom: 8%;
         right: 7%;
-        width: 35%;
+        width: 38%;
         z-index: 19;
 
         img {

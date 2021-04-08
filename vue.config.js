@@ -1,6 +1,6 @@
 'use strict'
 module.exports = {
-  publicPath: process.env.NODE_ENV === 'production' ? './' : '/', // 部署应用的基本URL
+  publicPath: process.env.NODE_ENV === 'production' ? './' : '/', // 部署应用的基础URL
   outputDir: `dist/${process.env.VUE_APP_VERSION}`, // 打包输出的目录
   assetsDir: 'assets', // 静态资源的目录
   filenameHashing: true, // 是否生成文件名称哈希
