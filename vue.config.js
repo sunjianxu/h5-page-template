@@ -13,6 +13,21 @@ module.exports = {
       chunks: ['chunk-vendors', 'chunk-common', 'index'] // 在这个页面中包含的块，默认情况下会包含 提取出来的通用 chunk 和 vendor chunk。
     }
   },
-  lintOnSave: process.env.NODE_ENV !== 'production', // 是否启动保存运行eslint
-  productionSourceMap: false // 打包是否生成Map文件
+  devServer: {
+    port: 2001,
+    proxy: {
+      '/api': {
+        target: '<url>',
+        ws: true,
+        changeOrigin: true
+      }
+    },
+    overlay: {
+      warnings: true,
+      errors: true
+    }
+  },
+  lintOnSave: process.env.NODE_ENV !== 'production', // 是否启动保存时lint代码
+  productionSourceMap: false, // 打包是否生成 source map文件
+  integrity: true // CDN 防止篡改js和css,提供额外的安全性
 }
