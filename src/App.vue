@@ -67,7 +67,7 @@
         </div>
       </div>
     </div>
-    <div v-show="isWechat" class="wechat-tips">
+    <div v-show="isWechat()" class="wechat-tips">
       <img src="./assets/lib/images/wx_pup.png">
     </div>
   </div>
@@ -75,7 +75,6 @@
 
 <script>
 import { getViewPortSize, downloadSource } from '@/utils'
-
 export default {
   name: 'App',
   data() {
@@ -92,27 +91,39 @@ export default {
   computed: {
     videoDOM() {
       return this.$refs['videoRef']
-    },
-    isWechat() {
-      return navigator.userAgent.toLowerCase().indexOf('micromessenger') !== -1; // 判断是否为微信浏览器
-    },
-    isAndroid() {
-      return navigator.userAgent.toLowerCase().indexOf('android') !== -1
     }
   },
   mounted() {
-    const { pageHeight } = getViewPortSize();
-    const elementById = this.videoDOM;
-    elementById.style.width = '100%';
-    elementById.style.height = pageHeight + 'px';
-    elementById.style.objectFit = 'fill';
-    elementById.addEventListener('ended', this.onVideoEnded, false);
+    setTimeout(() => {
+      const { pageHeight } = getViewPortSize();
+      const videoDOM = this.videoDOM;
+      videoDOM.style.width = '100%';
+      videoDOM.style.height = pageHeight + 'px';
+      videoDOM.style.objectFit = 'fill';
+      videoDOM.addEventListener('ended', this.onVideoEnded, false);
+      this.initENV();
+    }, 500);
   },
   beforeDestroy() {
     const videoDOM = this.videoDOM;
     videoDOM.removeEventListener('ended', this.onVideoEnded, false)
   },
   methods: {
+    isWechat() {
+      return navigator.userAgent.toLowerCase().indexOf('micromessenger') !== -1; // 判断是否为微信浏览器
+    },
+    isIos() {
+      const ua = navigator.userAgent;
+      const ipad = ua.match(/(iPad).*OS\s([\d_]+)/);
+      const isIphone = !ipad && ua.match(/(iPhone\sOS)\s([\d_]+)/);
+      const isIos = ipad || isIphone;
+      return !!isIos;
+    },
+    initENV() {
+      if (!this.isWechat() && !this.isIos()) {
+        downloadSource(this.VUE_APP_APK_URL);
+      }
+    },
     handleReplayVideo() {
       this.videoDOM.play();
       this.showPlayBtnWrapper = this.showReplayWrapper = false;
@@ -126,7 +137,7 @@ export default {
       this.showPlayBtnWrapper = this.showReplayWrapper = true;
     },
     handleNowDownload() {
-      this.isAndroid ? downloadSource(this.VUE_APP_APK_URL) : downloadSource(this.VUE_APP_IPA_URL);
+      this.isIos() ? downloadSource(this.VUE_APP_IPA_URL) : downloadSource(this.VUE_APP_APK_URL);
     }
   }
 }

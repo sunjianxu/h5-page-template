@@ -3,8 +3,8 @@
  * @returns {{pageHeight: number, pageWidth: number}}
  */
 export function getViewPortSize() {
-  var pageWidth = window.innerWidth;
-  var pageHeight = window.innerHeight;
+  let pageWidth = window.innerWidth;
+  let pageHeight = window.innerHeight;
   if (typeof pageWidth !== 'number') {
     if (document.compatMode === 'CSS1Compat') {
       //  是在标准模式下
@@ -27,16 +27,17 @@ export function getViewPortSize() {
  * @param src
  */
 export function downloadSource(src) {
-  var link = document.createElement('a');
+  const link = document.createElement('a');
+  const bodyDOM = document.body || document.getElementsByTagName('body')[0] || document.documentElement;
   if (typeof link.download !== 'undefined') {
     link.href = src;
     link.setAttribute('download', '');
-    document.body.appendChild(link);
+    bodyDOM.appendChild(link);
     link.onclick = function(e) {
       e.stopPropagation();
     }
     link.click();
-    document.body.removeChild(link);
+    bodyDOM.removeChild(link);
   } else {
     window.open(src, '_blank');
   }
