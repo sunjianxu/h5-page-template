@@ -67,14 +67,14 @@
         </div>
       </div>
     </div>
-    <div v-show="isWechat()" class="wechat-tips">
+    <div v-show="isWeiXin()" class="wechat-tips">
       <img src="./assets/lib/images/wx_pup.png">
     </div>
   </div>
 </template>
 
 <script>
-import { getViewPortSize, downloadSource } from '@/utils'
+import { getViewPortSize, downloadSource, isIos, isWeiXin } from '@/utils'
 export default {
   name: 'App',
   data() {
@@ -109,18 +109,9 @@ export default {
     videoDOM.removeEventListener('ended', this.onVideoEnded, false)
   },
   methods: {
-    isWechat() {
-      return navigator.userAgent.toLowerCase().indexOf('micromessenger') !== -1; // 判断是否为微信浏览器
-    },
-    isIos() {
-      const ua = navigator.userAgent;
-      const ipad = ua.match(/(iPad).*OS\s([\d_]+)/);
-      const isIphone = !ipad && ua.match(/(iPhone\sOS)\s([\d_]+)/);
-      const isIos = ipad || isIphone;
-      return !!isIos;
-    },
+    isWeiXin,
     initENV() {
-      if (!this.isWechat() && !this.isIos()) {
+      if (!this.isWeiXin() && !isIos()) {
         downloadSource(this.VUE_APP_APK_URL);
       }
     },
@@ -137,7 +128,7 @@ export default {
       this.showPlayBtnWrapper = this.showReplayWrapper = true;
     },
     handleNowDownload() {
-      this.isIos() ? downloadSource(this.VUE_APP_IPA_URL) : downloadSource(this.VUE_APP_APK_URL);
+      isIos() ? downloadSource(this.VUE_APP_IPA_URL) : downloadSource(this.VUE_APP_APK_URL);
     }
   }
 }
