@@ -85,7 +85,7 @@ export default {
       VUE_APP_GAME_SLOGAN: process.env.VUE_APP_GAME_SLOGAN,
       VUE_APP_GAME_NAME: process.env.VUE_APP_GAME_NAME,
       VUE_APP_APK_URL: process.env.VUE_APP_APK_URL,
-      VUE_APP_IPA_URL: `${process.env.VUE_APP_IPA_URL}&page_title=${window.btoa(window.encodeURIComponent(process.env.VUE_APP_GAME_NAME))}&game_icon=${window.btoa(window.encodeURIComponent(process.env.VUE_APP_GAME_ICON))}`
+      VUE_APP_IPA_URL: `${process.env.VUE_APP_IPA_URL}&page_title=${window.btoa(window.encodeURIComponent(process.env.VUE_APP_GAME_NAME))}&game_icon=${window.btoa(window.encodeURIComponent(process.env.VUE_APP_GAME_ICON))}&from_os_type=h5`
     }
   },
   computed: {
